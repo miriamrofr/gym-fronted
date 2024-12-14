@@ -5,13 +5,15 @@ import { InputField } from "../InputField";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-export const SocioForm = ({
+export const EntrenadorForm = ({
   type,
   data,
 }: {
   type: "ver" | "crear" | "modificar";
   data?: any;
 }) => {
+  console.log(data);
+
   const isDisabled = type === "ver";
   const [isSuccess, setIsSuccess] = useState(false);
   const schema = z.object({
@@ -77,6 +79,12 @@ export const SocioForm = ({
       }
       return undefined;
     }, z.date({ message: "Introduce fecha de nacimiento válida" })),
+    especialidad: z
+      .string()
+      .min(3, { message: "La especialidad debe tener al menos 3 caracteres" })
+      .max(40, {
+        message: "La especialidad debe tener como máximo 40 caracteres",
+      }),
   });
 
   useEffect(() => {
@@ -84,6 +92,7 @@ export const SocioForm = ({
       window.location.reload();
     }
   }, [isSuccess]);
+
   const {
     register,
     handleSubmit,
@@ -91,6 +100,7 @@ export const SocioForm = ({
   } = useForm({
     resolver: zodResolver(schema),
   });
+
   const onSubmit = handleSubmit(async (formData) => {
     const apiData = {
       nombre: formData.nombre,
@@ -105,17 +115,17 @@ export const SocioForm = ({
       provincia: formData.provincia,
       numero: parseInt(formData.numero, 10), // Convertir a número
       fechaNacimiento: formData.fechaNacimiento.toISOString(), // Convertir a ISO string
-      rol: "Socio", // Asignar el rol requerido
-      membresia: "activa", // Puedes definir este campo según las reglas de tu sistema
+      rol: "Entrenador", // Asignar el rol requerido
+      especialidad: formData.especialidad, // Puedes definir este campo según las reglas de tu sistema
     };
     try {
       var url;
       var method;
       if (type === "modificar") {
-        url = `https://localhost:7245/api/socios/${data.id}`;
+        url = `https://localhost:7245/api/entrenadores/${data.id}`;
         method = "PUT";
       } else {
-        url = `https://localhost:7245/api/socios/1`;
+        url = `https://localhost:7245/api/entrenadores/1`;
         method = "POST";
       }
       // Hacer la llamada a la API con el body y headers
@@ -143,10 +153,10 @@ export const SocioForm = ({
     <form className="flex flex-col gap-8" onSubmit={onSubmit}>
       <h1 className="text-xl font-semibold">
         {type === "crear"
-          ? "Registrar nuevo socio"
+          ? "Registrar nuevo entrenador"
           : type === "modificar"
-          ? "Modificar socio"
-          : "Ver socio"}
+          ? "Modificar entrenador"
+          : "Ver entrenador"}
       </h1>
       <span className="text-xs text-gray-400 font-medium">
         DATOS PERSONALES
@@ -225,12 +235,12 @@ export const SocioForm = ({
           error={errors.email}
         />
         <InputField
-          label="Membresia"
-          name="membresia"
-          defaultValue={data?.membresia}
+          label="Especialidad"
+          name="especialidad"
+          defaultValue={data?.especialidad || ""}
           disabled={type === "ver"}
           register={register}
-          error={errors.membresia}
+          error={errors.especialidad}
         />
       </div>
       <span className="text-xs text-gray-400 font-medium">DATOS DOMICILIO</span>

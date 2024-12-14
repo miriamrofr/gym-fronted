@@ -15,6 +15,7 @@ type Socio = {
   telefono: string;
   email: string;
   estado?: string; // Si estado no está en el backend, puedes hacerlo opcional.
+  sexo: string;
 };
 
 const columns = [
@@ -63,7 +64,7 @@ export const GestionSocios = () => {
       setLoading(true); // Empieza a cargar
       try {
         // Construir la URL con la búsqueda y paginación
-        let url = `https://localhost:7245/api/Socios`;
+        let url = `https://localhost:7245/api/socios`;
         if (search) {
           url += `/search?value=${search}&page=${page}`;
           //https://localhost:7245/api/Socios/search?value=722&page=1
@@ -94,7 +95,9 @@ export const GestionSocios = () => {
           provincia: socio.provincia,
           calle: socio.calle,
           numero: socio.numero,
+          sexo: socio.sexo,
         }));
+
         setSocios(transformedData);
       } catch (error) {
         console.error("Error al cargar los socios:", error);
@@ -122,9 +125,9 @@ export const GestionSocios = () => {
       <td className="hidden lg:table-cell py-4">{item.telefono}</td>
       <td className="py-4">
         <div className="flex items-center gap-2">
-          <FormModal table="socio" id={item.id} data={item} type="ver" />
-          <FormModal table="socio" id={item.id} data={item} type="modificar" />
-          <FormModal table="socio" id={item.id} type="eliminar" />
+          <FormModal table="socios" id={item.id} data={item} type="ver" />
+          <FormModal table="socios" id={item.id} data={item} type="modificar" />
+          <FormModal table="socios" id={item.id} type="eliminar" />
         </div>
       </td>
     </tr>
@@ -138,7 +141,7 @@ export const GestionSocios = () => {
           <SearchBar onSearch={handleSearch} />
           <div className="flex items-center gap-4 self-end">
             <div className="flex items-center">
-              <FormModal table="socio" type="crear" />
+              <FormModal table="socios" type="crear" />
             </div>
           </div>
         </div>

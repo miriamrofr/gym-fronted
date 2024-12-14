@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { toast } from "react-toastify";
 import {
   faEye,
   faPenSquare,
@@ -6,8 +7,9 @@ import {
   faTrashCan,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SocioForm } from "../../components/Form/SocioForm";
+import { EntrenadorForm } from "../../components/Form/EntrenadorForm";
 
 export const FormModal = ({
   table,
@@ -15,7 +17,7 @@ export const FormModal = ({
   data,
   id,
 }: {
-  table: "socio" | "entrenador";
+  table: "socios" | "entrenadores";
   type: "ver" | "crear" | "eliminar" | "modificar";
   data?: any;
   id?: number;
@@ -31,23 +33,53 @@ export const FormModal = ({
   };
 
   const [open, setOpen] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
+  useEffect(() => {
+    if (isSuccess) {
+      window.location.reload();
+    }
+  }, [isSuccess]);
+  const onSubmit = async (e: React.FormEvent) => {
+    try {
+      let url = `https://localhost:7245/api/${table}/${id}`;
+
+      const response = await fetch(url, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al eliminar el socio");
+      }
+      setIsSuccess(true);
+    } catch (error) {
+      console.error("Error al eliminar:", error);
+      toast.error("Ocurrió un error al enviar los datos");
+    }
+  };
   const Form = () => {
+    const FormComponent = table === "socios" ? SocioForm : EntrenadorForm;
     return type === "eliminar" ? (
-      <form action="" className="p-4 flex flex-col gap-4">
+      <form onSubmit={onSubmit} className="p-4 flex flex-col gap-4">
         <span className="text-center font-medium">
           ¿Seguro que quieres eliminar este {table}?
         </span>
-        <button className="bg-red-700 text-white py-2 px-4 rounded-md border-none w-max self-center">
+        <button
+          type="submit"
+          className="bg-red-700 text-white py-2 px-4 rounded-md border-none w-max self-center"
+        >
           Eliminar
         </button>
       </form>
     ) : type === "ver" ? (
-      <SocioForm type="ver" data={data} />
+      <FormComponent type="ver" data={data} />
     ) : type === "modificar" ? (
-      <SocioForm type="modificar" data={data} />
+      <FormComponent type="modificar" data={data} />
     ) : (
-      <SocioForm type="crear" />
+      <FormComponent type="crear" />
     );
   };
 

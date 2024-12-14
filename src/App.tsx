@@ -8,23 +8,28 @@ import { GestionClaseGuiada } from "./pages/Admin/GestionClaseGuiada";
 import { GestionReservaPista } from "./pages/Admin/GestionReservaPista";
 import { GestionEntrenamientos } from "./pages/Admin/GestionEntrenamientos";
 import { PerfilAdmin } from "./pages/Admin/PerfilAdmin";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<AdminDashboardPage />}>
-        <Route index element={<Navigate to="info-gimnasio" replace />} />
-        <Route path="info-gimnasio" element={<InfoGimnasio />} />
-        <Route path="socios" element={<GestionSocios />} />
-        <Route path="empleados" element={<GestionEntrenador />} />
-        <Route path="materiales" element={<GestionMaterial />} />
-        <Route path="clases-guiadas" element={<GestionClaseGuiada />} />
-        <Route path="reserva-pistas" element={<GestionReservaPista />} />
-        <Route path="entrenamientos" element={<GestionEntrenamientos />} />
-        <Route path="perfil" element={<PerfilAdmin />} />
-        <Route path="logout" element={<Navigate to="/" replace />} />
-      </Route>
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/" element={<AdminDashboardPage />}>
+          <Route index element={<Navigate to="info-gimnasio" replace />} />
+          <Route path="info-gimnasio" element={<InfoGimnasio />} />
+          <Route path="socios" element={<GestionSocios />} />
+          <Route path="entrenadores" element={<GestionEntrenador />} />
+          <Route path="materiales" element={<GestionMaterial />} />
+          <Route path="clases-guiadas" element={<GestionClaseGuiada />} />
+          <Route path="reserva-pistas" element={<GestionReservaPista />} />
+          <Route path="entrenamientos" element={<GestionEntrenamientos />} />
+          <Route path="perfil" element={<PerfilAdmin />} />
+          <Route path="logout" element={<Navigate to="/" replace />} />
+        </Route>
+      </Routes>
+      <ToastContainer position="top-right" autoClose={5000} hideProgressBar />
+    </>
   );
 }
 

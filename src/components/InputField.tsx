@@ -32,7 +32,7 @@ export const InputField = ({
         className={`ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm text-black w-full ${
           disabled
             ? "bg-white text-black ring-gray-300"
-            : "bg-gray-100 text-black ring-gray-300"
+            : "bg-white text-black ring-gray-300"
         }`}
         {...inputProps}
         defaultValue={defaultValue}

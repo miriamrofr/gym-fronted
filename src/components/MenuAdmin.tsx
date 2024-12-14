@@ -28,8 +28,8 @@ const menuItems = [
       },
       {
         icon: <FontAwesomeIcon icon={faUserTie} />, // Aquí usas el componente FontAwesomeIcon
-        label: "Empleados",
-        href: "/empleados",
+        label: "Entrenadores",
+        href: "/entrenadores",
       },
       {
         icon: <FontAwesomeIcon icon={faCartShopping} />, // Aquí usas el componente FontAwesomeIcon

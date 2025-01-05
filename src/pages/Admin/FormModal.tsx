@@ -10,6 +10,8 @@ import {
 import { useEffect, useState } from "react";
 import { SocioForm } from "../../components/Form/SocioForm";
 import { EntrenadorForm } from "../../components/Form/EntrenadorForm";
+import { MaterialForm } from "../../components/Form/MaterialForm";
+import { ActividadForm } from "../../components/Form/ActividadForm";
 
 export const FormModal = ({
   table,
@@ -17,7 +19,7 @@ export const FormModal = ({
   data,
   id,
 }: {
-  table: "socios" | "entrenadores";
+  table: "socios" | "entrenadores" | "material" | "actividad";
   type: "ver" | "crear" | "eliminar" | "modificar";
   data?: any;
   id?: number;
@@ -40,7 +42,8 @@ export const FormModal = ({
       window.location.reload();
     }
   }, [isSuccess]);
-  const onSubmit = async (e: React.FormEvent) => {
+  const onSubmit = async () => {
+    console.log(id);
     try {
       let url = `https://localhost:7245/api/${table}/${id}`;
 
@@ -61,11 +64,19 @@ export const FormModal = ({
     }
   };
   const Form = () => {
-    const FormComponent = table === "socios" ? SocioForm : EntrenadorForm;
+    const FormComponent =
+      table === "socios"
+        ? SocioForm
+        : table === "entrenadores"
+        ? EntrenadorForm
+        : table === "material"
+        ? MaterialForm
+        : ActividadForm;
     return type === "eliminar" ? (
       <form onSubmit={onSubmit} className="p-4 flex flex-col gap-4">
         <span className="text-center font-medium">
-          ¿Seguro que quieres eliminar este {table}?
+          ¿Seguro que quieres eliminar {table === "actividad" ? "esta" : "este"}{" "}
+          {table}?
         </span>
         <button
           type="submit"

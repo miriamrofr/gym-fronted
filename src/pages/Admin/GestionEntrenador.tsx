@@ -47,7 +47,6 @@ const columns = [
 
 export const GestionEntrenador = () => {
   const [entrenador, setEntrenador] = useState<Entrenador[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const [totalPages, setTotalPages] = useState(0);
   const [searchParams] = useSearchParams();
   const pageNumber = parseInt(searchParams.get("page") || "1");
@@ -61,7 +60,6 @@ export const GestionEntrenador = () => {
 
   useEffect(() => {
     const fetchEntrenador = async (page: number, search: string) => {
-      setLoading(true); // Empieza a cargar
       try {
         // Construir la URL con la búsqueda y paginación
         let url = `https://localhost:7245/api/entrenadores`;
@@ -100,8 +98,6 @@ export const GestionEntrenador = () => {
         setEntrenador(transformedData);
       } catch (error) {
         console.error("Error al cargar los socios:", error);
-      } finally {
-        setLoading(false);
       }
     };
 

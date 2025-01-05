@@ -10,6 +10,8 @@ type InputFieldProps = {
   error?: FieldError | Merge<FieldError, FieldErrorsImpl<any>>; // Actualización aquí
   inputProps?: React.InputHTMLAttributes<HTMLHtmlElement>;
   disabled?: boolean;
+  value?: string;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void; // Cambio aquí para recibir una función
 };
 
 export const InputField = ({
@@ -21,6 +23,8 @@ export const InputField = ({
   inputProps,
   disabled = false,
   error,
+  value,
+  onChange,
 }: InputFieldProps) => {
   return (
     <div className="flex flex-col gap-2 w-full md:w-1/4">
@@ -36,6 +40,12 @@ export const InputField = ({
         }`}
         {...inputProps}
         defaultValue={defaultValue}
+        value={value}
+        onChange={(e) => {
+          if (onChange) {
+            onChange(e); // Si `onChange` fue pasado como prop, ejecutamos la función
+          }
+        }}
       />
       {error?.message && (
         <p className="text-xs text-red-400">{error.message.toString()}</p>

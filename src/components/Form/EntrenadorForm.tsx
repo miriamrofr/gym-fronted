@@ -12,8 +12,6 @@ export const EntrenadorForm = ({
   type: "ver" | "crear" | "modificar";
   data?: any;
 }) => {
-  console.log(data);
-
   const isDisabled = type === "ver";
   const [isSuccess, setIsSuccess] = useState(false);
   const schema = z.object({
@@ -142,7 +140,6 @@ export const EntrenadorForm = ({
         throw new Error("Error en la API");
       }
 
-      const result = await response.json();
       setIsSuccess(true);
     } catch (error) {
       toast.error("Ocurrió un error al enviar los datos");

@@ -12,11 +12,12 @@ type InputFieldProps = {
   disabled?: boolean;
   value?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void; // Cambio aquí para recibir una función
+  className?: string;
 };
 
 export const InputField = ({
   label,
-  type = "text",
+  type,
   register,
   name,
   defaultValue,
@@ -25,6 +26,7 @@ export const InputField = ({
   error,
   value,
   onChange,
+  className,
 }: InputFieldProps) => {
   return (
     <div className="flex flex-col gap-2 w-full md:w-1/4">
@@ -37,7 +39,7 @@ export const InputField = ({
           disabled
             ? "bg-white text-black ring-gray-300"
             : "bg-white text-black ring-gray-300"
-        }`}
+        } ${className ?? ""}`}
         {...inputProps}
         defaultValue={defaultValue}
         value={value}

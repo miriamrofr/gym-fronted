@@ -3,8 +3,8 @@ import { Outlet } from "react-router-dom";
 
 export const AdminDashboardPage = () => {
   return (
-    <div className="h-screen flex">
-      <div className="flex flex-col h-full w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] bg-[#0A0A0A] p-3 ">
+    <div className="h-full flex">
+      <div className="flex flex-col w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] bg-[#0A0A0A] p-3 ">
         <div className="flex items-center justify-center space-x-2">
           <img
             src="/logo2.png"

@@ -102,7 +102,7 @@ export const GestionMaterial = () => {
       <td className="hidden lg:table-cell py-4">
         {new Date(item.fechaAdquisicion).toLocaleDateString()}
       </td>
-      <td className="hidden md:table-cell py-4">{item.cantidad}</td>
+      <td className="hidden md:table-cell py-4">{item.categoria}</td>
       <td className="hidden lg:table-cell py-4">{item.precio}</td>
       <td className="py-4">
         <div className="flex items-center gap-2">

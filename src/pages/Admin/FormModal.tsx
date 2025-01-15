@@ -12,6 +12,8 @@ import { SocioForm } from "../../components/Form/SocioForm";
 import { EntrenadorForm } from "../../components/Form/EntrenadorForm";
 import { MaterialForm } from "../../components/Form/MaterialForm";
 import { ActividadForm } from "../../components/Form/ActividadForm";
+import { PistaForm } from "../../components/Form/PistaForm";
+import { TarifaForm } from "../../components/Form/TarifaForm";
 
 export const FormModal = ({
   table,
@@ -19,7 +21,13 @@ export const FormModal = ({
   data,
   id,
 }: {
-  table: "socios" | "entrenadores" | "material" | "actividad";
+  table:
+    | "socios"
+    | "entrenadores"
+    | "material"
+    | "actividad"
+    | "pista"
+    | "tarifa";
   type: "ver" | "crear" | "eliminar" | "modificar";
   data?: any;
   id?: number;
@@ -44,9 +52,15 @@ export const FormModal = ({
   }, [isSuccess]);
   const onSubmit = async () => {
     console.log(id);
-    try {
-      let url = `https://localhost:7245/api/${table}/${id}`;
+    console.log(data);
 
+    try {
+      let url;
+      if (table === "tarifa") {
+        url = `https://localhost:7245/api/gimnasio/${data.id}/tarifa/${id}`;
+      } else {
+        url = `https://localhost:7245/api/${table}/${id}`;
+      }
       const response = await fetch(url, {
         method: "DELETE",
         headers: {
@@ -55,7 +69,7 @@ export const FormModal = ({
       });
 
       if (!response.ok) {
-        throw new Error("Error al eliminar el socio");
+        throw new Error("Error al eliminar");
       }
       setIsSuccess(true);
     } catch (error) {
@@ -71,11 +85,18 @@ export const FormModal = ({
         ? EntrenadorForm
         : table === "material"
         ? MaterialForm
-        : ActividadForm;
+        : table === "actividad"
+        ? ActividadForm
+        : table === "pista"
+        ? PistaForm
+        : TarifaForm;
     return type === "eliminar" ? (
       <form onSubmit={onSubmit} className="p-4 flex flex-col gap-4">
         <span className="text-center font-medium">
-          ¿Seguro que quieres eliminar {table === "actividad" ? "esta" : "este"}{" "}
+          ¿Seguro que quieres eliminar{" "}
+          {table === "actividad" || table === "pista" || table === "tarifa"
+            ? "esta "
+            : "este "}
           {table}?
         </span>
         <button

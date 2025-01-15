@@ -145,13 +145,6 @@ export const ActividadForm = ({
     name: "actividades", // Este es el nombre del array
   });
 
-  useEffect(() => {
-    if (data) {
-      setValue("idEntrenador", data.idEntrenador);
-      setValue("salaId", data.salaId);
-    }
-  }, [data, setValue]);
-
   const onSubmit = async (dataForm: FormValues) => {
     // Transformar los datos antes de enviarlos a la API
     const transformedData = dataForm.actividades.map((actividad: any) => {
@@ -180,8 +173,6 @@ export const ActividadForm = ({
         horaFin: horario.horaFin,
       })),
     };
-
-    console.log(apiData);
 
     try {
       var url;
@@ -231,10 +222,10 @@ export const ActividadForm = ({
     <form className="flex flex-col gap-8 " onSubmit={handleSubmit(onSubmit)}>
       <h1 className="text-xl font-semibold">
         {type === "crear"
-          ? "Registrar nuevo entrenador"
+          ? "Registrar nueva actividad grupal"
           : type === "modificar"
-          ? "Modificar entrenador"
-          : "Ver entrenador"}
+          ? "Modificar actividad grupal"
+          : "Ver actividad grupal"}
       </h1>
       <span className="text-xs text-gray-400 font-medium">ACTIVIDAD</span>
       <div className=" flex justify-between flex-wrap gap-2">

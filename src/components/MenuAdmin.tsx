@@ -11,6 +11,7 @@ import {
   faCartShopping,
 } from "@fortawesome/free-solid-svg-icons";
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../context/UseAuth";
 
 const menuItems = [
   {
@@ -19,37 +20,37 @@ const menuItems = [
       {
         icon: <FontAwesomeIcon icon={faInfoCircle} />, // Aquí usas el componente FontAwesomeIcon
         label: "Info gimnasio",
-        href: "/info-gimnasio",
+        href: "/admin/info-gimnasio",
       },
       {
         icon: <FontAwesomeIcon icon={faUsers} />, // Aquí usas el componente FontAwesomeIcon
         label: "Socios",
-        href: "/socios",
+        href: "/admin/socios",
       },
       {
         icon: <FontAwesomeIcon icon={faUserTie} />, // Aquí usas el componente FontAwesomeIcon
         label: "Entrenadores",
-        href: "/entrenadores",
+        href: "/admin/entrenadores",
       },
       {
         icon: <FontAwesomeIcon icon={faCartShopping} />, // Aquí usas el componente FontAwesomeIcon
         label: "Material gimnasio",
-        href: "/materiales",
+        href: "/admin/materiales",
       },
       {
         icon: <FontAwesomeIcon icon={faCalendar} />, // Aquí usas el componente FontAwesomeIcon
         label: "Clases guiadas",
-        href: "/clases-guiadas",
+        href: "/admin/clases-guiadas",
       },
       {
         icon: <FontAwesomeIcon icon={faTableTennisPaddleBall} />, // Aquí usas el componente FontAwesomeIcon
         label: "Reserva pistas",
-        href: "/reserva-pistas",
+        href: "/admin/reserva-pistas",
       },
       {
         icon: <FontAwesomeIcon icon={faDumbbell} />, // Aquí usas el componente FontAwesomeIcon
         label: "Entrenamientos",
-        href: "/entrenamientos",
+        href: "/admin/entrenamientos",
       },
     ],
   },
@@ -59,20 +60,24 @@ const menuItems = [
       {
         icon: <FontAwesomeIcon icon={faUser} />, // Aquí usas el componente FontAwesomeIcon
         label: "Perfil",
-        href: "/perfil",
+        href: "/admin/perfil",
       },
       {
         icon: <FontAwesomeIcon icon={faRightFromBracket} />, // Aquí usas el componente FontAwesomeIcon
         label: "Cerrar sesión",
-        href: "/logout",
+        href: "/",
+        onClick: true,
       },
     ],
   },
 ];
 
 const MenuAdmin = () => {
+  const authContext = useAuth(); // Accede al contexto
+  const { logout } = authContext ?? {};
+
   return (
-    <div className="h-full flex flex-col justify-between">
+    <div className="h-screen flex flex-col justify-between">
       <div className=" flex-grow mt-6">
         {menuItems
           .filter((section) => section.title !== "Cuenta")
@@ -96,7 +101,7 @@ const MenuAdmin = () => {
             </div>
           ))}
       </div>
-      <div className="mb-0">
+      <div className="mb-0 ">
         {menuItems
           .filter((section) => section.title == "Cuenta")
           .map((i) => (
@@ -105,10 +110,16 @@ const MenuAdmin = () => {
               {i.items.map((items) => (
                 <NavLink
                   to={items.href}
+                  onClick={(e) => {
+                    if (items.onClick && logout) {
+                      e.preventDefault(); // Evita navegación
+                      logout(); // Llama a la función logout
+                    }
+                  }}
                   key={items.label}
                   className={({ isActive }) =>
                     `flex items-center space-x-2 p-2 md:justify-start justify-center rounded transition ease-in-out ${
-                      isActive ? " bg-[#1A1A1A] " : "hover:bg-[#1A1A1A]"
+                      isActive ? " bg-[#1a1a1a] " : "hover:bg-[#1A1A1A]"
                     }`
                   }
                 >

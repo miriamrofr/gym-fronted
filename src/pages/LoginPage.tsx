@@ -44,7 +44,7 @@ export const LoginPage = () => {
             <form className="" onSubmit={handleSubmit(onSubmit)}>
               <div className="mb-5">
                 <label className="block mb-2 text-sm font-medium text-[#fff]">
-                  Email
+                  Correo electrónico
                 </label>
 
                 <input
@@ -75,7 +75,7 @@ export const LoginPage = () => {
                     {errors.password.message.toString()}
                   </p>
                 )}
-                <a href="#" className="text-[#fff] text-xs">
+                <a href="/forgot-password" className="text-[#fff] text-xs">
                   ¿Olvidaste la contraseña?
                 </a>
               </div>
@@ -86,7 +86,10 @@ export const LoginPage = () => {
             </form>
             <div className="flex  p-8 text-sm justify-center space-x-2">
               <a className="text-xs">¿No tienes cuenta?</a>
-              <a href="#" className="text-xs font-medium text-[#f35a30]">
+              <a
+                href="create-account"
+                className="text-xs font-medium text-[#f35a30]"
+              >
                 Crear cuenta
               </a>
             </div>

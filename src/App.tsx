@@ -15,6 +15,13 @@ import { LoginPage } from "./pages/LoginPage";
 import SocioDashboardPage from "./pages/Socio/SocioDashboardPage";
 import { UserProvider } from "./context/UseAuth"; // Ajusta la ruta a donde se encuentra tu archivo
 import ProtectedRoute from "./routes/ProtectedRoute";
+import { ResetCreatePassword } from "./pages/ResetCreatePassword";
+import { CreateAccount } from "./pages/CreateAccount";
+import { ForgotPassword } from "./pages/ForgotPassword";
+import { PerfilSocio } from "./pages/Socio/PerfilSocio";
+import { ReservaClase } from "./pages/Socio/ReservaClase";
+import { ReservaPista } from "./pages/Socio/ReservaPista";
+import { Inscripcion } from "./pages/Socio/Inscripcion";
 
 function App() {
   return (
@@ -22,6 +29,9 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/reset-password" element={<ResetCreatePassword />} />
+        <Route path="/create-account" element={<CreateAccount />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         {/*Ruta protegida*/}
         <Route
           path="/admin"
@@ -40,7 +50,6 @@ function App() {
           <Route path="reserva-pistas" element={<GestionReservaPista />} />
           <Route path="entrenamientos" element={<GestionEntrenamientos />} />
           <Route path="perfil" element={<PerfilAdmin />} />
-          <Route path="logout" element={<Navigate to="/" replace />} />
         </Route>
         <Route
           path="/socio"
@@ -49,7 +58,14 @@ function App() {
               <SocioDashboardPage />
             </ProtectedRoute>
           }
-        ></Route>{" "}
+        >
+          <Route index element={<Navigate to="perfil" replace />} />
+          <Route path="perfil" element={<PerfilSocio />} />
+          <Route path="inscripcion" element={<Inscripcion />} />
+          <Route path="reserva-clases" element={<ReservaClase />} />
+          <Route path="reserva-pistas" element={<ReservaPista />} />
+        </Route>
+
         <Route path="*" element={<h1>NO SE ENCUENTRA PAGINA </h1>}></Route>
       </Routes>
 

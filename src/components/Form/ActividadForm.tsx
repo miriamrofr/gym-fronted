@@ -71,6 +71,7 @@ export const ActividadForm = ({
             /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
             "Introduce una hora válida"
           ),
+        id: z.string().optional(),
       })
     ),
   });
@@ -79,6 +80,7 @@ export const ActividadForm = ({
     fecha: Date;
     horaComienzo: string;
     horaFin: string;
+    id?: string;
   };
 
   type FormValues = {
@@ -168,11 +170,14 @@ export const ActividadForm = ({
       entrenadorId: dataForm.idEntrenador,
       salaId: dataForm.salaId,
       horarios: transformedData.map((horario) => ({
+        id: isNaN(Number(horario.id)) ? "0" : horario.id,
         diaSemana: horario.diaSemana,
         horaComienzo: horario.horaComienzo,
         horaFin: horario.horaFin,
       })),
     };
+
+    console.log(apiData);
 
     try {
       var url;
@@ -330,6 +335,11 @@ export const ActividadForm = ({
           key={item.id}
           className="flex justify-between items-center flex-wrap gap-4"
         >
+          <input
+            type="hidden"
+            {...register(`actividades.${index}.id`)} // Campo oculto para el id
+            defaultValue={item.id}
+          />
           <InputField
             label="Fecha"
             type="date"

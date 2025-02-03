@@ -218,7 +218,9 @@ export const EntrenadorForm = ({
           register={register}
           disabled={type === "ver"}
           defaultValue={
-            data?.fechaNac ? data?.fechaNac.toISOString().split("T")[0] : ""
+            data?.fechaNac
+              ? new Date(data?.fechaNac).toLocaleDateString("en-CA")
+              : ""
           } // Convierte la fecha a formato YYYY-MM-DD
           type="date"
           error={errors.fechaNacimiento}

@@ -34,13 +34,9 @@ export const PistaForm = ({
 
     horarios: z.array(
       z.object({
-        fecha: z.preprocess((val) => {
-          if (typeof val === "string" && val.trim() !== "") {
-            const parsedDate = new Date(val);
-            return isNaN(parsedDate.getTime()) ? undefined : parsedDate;
-          }
-          return undefined;
-        }, z.date({ message: "Introduce fecha válida" })),
+        fecha: z.string().min(1, {
+          message: "Introduce día de la semana",
+        }),
         disponibilidadComienzo: z
           .string()
           .regex(
@@ -58,7 +54,7 @@ export const PistaForm = ({
   });
 
   type Horario = {
-    fecha: Date;
+    fecha: string;
     disponibilidadComienzo: string;
     disponibilidadFin: string;
   };
@@ -74,13 +70,9 @@ export const PistaForm = ({
   const transformedData = data
     ? data.horarios.map((item: any) => ({
         id: item.id.toString(),
-        fecha: item.disponibilidadComienzo.toISOString().split("T")[0], // Fecha en formato 'YYYY-MM-DD'
-        disponibilidadComienzo: item.disponibilidadComienzo
-          .toTimeString()
-          .substring(0, 5), // Hora en formato 'HH:mm'
-        disponibilidadFin: item.disponibilidadFin
-          .toTimeString()
-          .substring(0, 5), // Hora en formato 'HH:mm'
+        fecha: item.diaSemana, // Fecha en formato 'YYYY-MM-DD'
+        disponibilidadComienzo: item.disponibilidadComienzo.substring(0, 5),
+        disponibilidadFin: item.disponibilidadFin.substring(0, 5),
       }))
     : [];
 
@@ -112,33 +104,19 @@ export const PistaForm = ({
   const onSubmit = async (dataForm: FormValues) => {
     // Transformar los datos antes de enviarlos a la API
     const transformedData = dataForm.horarios.map((horario: any) => {
-      const fecha = new Date(horario.fecha); // La fecha en formato 'YYYY-MM-DD'
-      const disponibilidadComienzo = `${horario.disponibilidadComienzo}`; // Combina fecha + hora de inicio
-      const disponibilidadFin = `${horario.disponibilidadFin}`; // Combina fecha + hora de fin
-      const formattedDate = fecha.toISOString().split("T")[0];
-      const fechaHoraComienzo = `${formattedDate}T${disponibilidadComienzo}:00`;
-      const fechaHoraFin = `${formattedDate}T${disponibilidadFin}:00`;
       return {
-        id: horario.id, // Si ya tienes un ID, lo mantienes
-        diaSemana: new Date(fecha).toLocaleString("es-ES", { weekday: "long" }), // Obtener el día de la semana en español
-        disponibilidadComienzo: fechaHoraComienzo, // Asegúrate de que sea ISO 8601
-        disponibilidadFin: fechaHoraFin, // Asegúrate de que sea ISO 8601
+        id: horario.id,
+        diaSemana: horario.fecha,
+        horaComienzo: `${horario.disponibilidadComienzo}:00`,
+        horaFin: `${horario.disponibilidadFin}:00`,
       };
     });
 
     const apiData = {
       nombre: dataForm.nombre,
       tipo: dataForm.tipo,
-      horarios: transformedData.map((horario) => ({
-        diaSemana: horario.diaSemana,
-        disponibilidadComienzo: horario.disponibilidadComienzo,
-        disponibilidadFin: horario.disponibilidadFin,
-      })),
+      horarios: transformedData,
     };
-
-    console.log(apiData);
-    console.log(data.id);
-
     try {
       var url;
       var method;
@@ -205,7 +183,7 @@ export const PistaForm = ({
               type="button"
               onClick={() =>
                 append({
-                  fecha: new Date(),
+                  fecha: "",
                   disponibilidadComienzo: "",
                   disponibilidadFin: "",
                 })
@@ -224,8 +202,8 @@ export const PistaForm = ({
           className="flex justify-between items-center flex-wrap gap-4"
         >
           <InputField
-            label="Fecha"
-            type="date"
+            label="Día de la semana"
+            type="text"
             register={register}
             name={`horarios[${index}].fecha`} // Asegúrate de que el nombre coincida con los valores de `defaultValues`
             //defaultValue={item.fecha} // Usamos `item.fecha` aquí

@@ -12,6 +12,7 @@ export const SocioForm = ({
   type: "ver" | "crear" | "modificar";
   data?: any;
 }) => {
+  console.log(data);
   const isDisabled = type === "ver";
   const [isSuccess, setIsSuccess] = useState(false);
   const schema = z.object({
@@ -108,6 +109,7 @@ export const SocioForm = ({
       rol: "Socio", // Asignar el rol requerido
       membresia: "activa", // Puedes definir este campo según las reglas de tu sistema
     };
+
     try {
       var url;
       var method;
@@ -211,7 +213,9 @@ export const SocioForm = ({
           register={register}
           disabled={type === "ver"}
           defaultValue={
-            data?.fechaNac ? data?.fechaNac.toISOString().split("T")[0] : ""
+            data?.fechaNac
+              ? new Date(data?.fechaNac).toLocaleDateString("en-CA")
+              : ""
           } // Convierte la fecha a formato YYYY-MM-DD
           type="date"
           error={errors.fechaNacimiento}

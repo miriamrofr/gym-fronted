@@ -22,6 +22,8 @@ import { PerfilSocio } from "./pages/Socio/PerfilSocio";
 import { ReservaClase } from "./pages/Socio/ReservaClase";
 import { ReservaPista } from "./pages/Socio/ReservaPista";
 import { Inscripcion } from "./pages/Socio/Inscripcion";
+import HacerReserva from "./pages/Socio/HacerReserva";
+import VerReserva from "./pages/Socio/VerReserva";
 
 function App() {
   return (
@@ -63,7 +65,10 @@ function App() {
           <Route path="perfil" element={<PerfilSocio />} />
           <Route path="inscripcion" element={<Inscripcion />} />
           <Route path="reserva-clases" element={<ReservaClase />} />
-          <Route path="reserva-pistas" element={<ReservaPista />} />
+          <Route path="reserva-pistas" element={<ReservaPista />}>
+            <Route path="ver-reservas" element={<VerReserva />} />
+            <Route path="reservar" element={<HacerReserva />} />
+          </Route>
         </Route>
 
         <Route path="*" element={<h1>NO SE ENCUENTRA PAGINA </h1>}></Route>

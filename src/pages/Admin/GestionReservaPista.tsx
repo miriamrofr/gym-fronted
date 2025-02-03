@@ -8,8 +8,8 @@ import { Pagination } from "../../components/Pagination";
 type Horario = {
   id: number;
   diaSemana: string;
-  disponibilidadComienzo: Date;
-  disponibilidadFin: Date;
+  disponibilidadComienzo: string;
+  disponibilidadFin: string;
 };
 type Pista = {
   id: number;
@@ -66,8 +66,8 @@ export const GestionReservaPista = () => {
             horarios: pista.horarios.map((horario: any) => ({
               id: horario.id,
               diaSemana: horario.diaSemana,
-              disponibilidadComienzo: new Date(horario.disponibilidadComienzo),
-              disponibilidadFin: new Date(horario.disponibilidadFin),
+              disponibilidadComienzo: horario.horaComienzo,
+              disponibilidadFin: horario.horaFin,
             })),
           }))
         );
@@ -98,21 +98,11 @@ export const GestionReservaPista = () => {
               >
                 <span className="font-bold">{horario.diaSemana}:</span>
                 <span>
-                  {new Date(horario.disponibilidadComienzo).toLocaleTimeString(
-                    "es-ES",
-                    {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    }
-                  )}{" "}
-                  -{" "}
-                  {new Date(horario.disponibilidadFin).toLocaleTimeString(
-                    "es-ES",
-                    {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    }
-                  )}
+                  {horario.disponibilidadComienzo
+                    .split(":")
+                    .slice(0, 2)
+                    .join(":")}
+                  - {horario.disponibilidadFin.split(":").slice(0, 2).join(":")}
                 </span>
               </li>
             ))}

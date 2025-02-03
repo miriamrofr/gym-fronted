@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Table } from "../../components/Table";
 import CalendarioSemanal from "../../components/CalendarioSemanal";
 import { useAuth } from "../../context/UseAuth";
@@ -35,6 +35,7 @@ export const ReservaClase = () => {
     { header: "", accessor: "acciones" },
   ];
 
+  console.log(clases);
   const renderRow = (item: Clases) => (
     <tr
       key={item.id}
@@ -83,7 +84,7 @@ export const ReservaClase = () => {
           </button>
         ) : (
           <button
-            className="bg-[#f35a30] hover:bg-[#ff7a47] text-white p-2 mt-2 rounded-md border-none w-max font-bold "
+            className="bg-red-600 hover:bg-red-500 text-white p-2 mt-2 rounded-md border-none w-max font-bold "
             onClick={() => cancelar(item.horarios[0].id)}
           >
             Cancelar

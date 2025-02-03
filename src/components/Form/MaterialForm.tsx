@@ -192,7 +192,7 @@ export const MaterialForm = ({
           disabled={type === "ver"}
           defaultValue={
             data?.fechaAdquisicion
-              ? data?.fechaAdquisicion.toISOString().split("T")[0]
+              ? new Date(data?.fechaAdquisicion).toLocaleDateString("en-CA")
               : ""
           } // Convierte la fecha a formato YYYY-MM-DD
           type="date"

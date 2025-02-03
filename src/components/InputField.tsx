@@ -1,5 +1,6 @@
 import React, { HtmlHTMLAttributes } from "react";
 import { FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
+import { useState, useEffect } from "react";
 
 type InputFieldProps = {
   label: string;
@@ -11,6 +12,7 @@ type InputFieldProps = {
   inputProps?: React.InputHTMLAttributes<HTMLHtmlElement>;
   disabled?: boolean;
   value?: string;
+  minDate?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void; // Cambio aquí para recibir una función
   className?: string;
 };
@@ -27,7 +29,21 @@ export const InputField = ({
   value,
   onChange,
   className,
+  minDate,
 }: InputFieldProps) => {
+  const [hoy, setHoy] = useState("");
+
+  useEffect(() => {
+    const fechaActual = new Date().toISOString().split("T")[0]; // Obtiene la fecha en formato YYYY-MM-DD
+    setHoy(fechaActual);
+  }, []);
+
+  const handleInputChange = (e: any) => {
+    if (e.target.value < hoy) {
+      e.target.value = hoy;
+    }
+  };
+
   return (
     <div className="flex flex-col gap-2 w-full md:w-1/4">
       <label className="text-xs">{label}</label>
@@ -43,6 +59,7 @@ export const InputField = ({
         {...inputProps}
         defaultValue={defaultValue}
         value={value}
+        min={type === "date" && minDate ? hoy : undefined}
         onChange={(e) => {
           if (onChange) {
             onChange(e); // Si `onChange` fue pasado como prop, ejecutamos la función

@@ -15,6 +15,7 @@ type InputFieldProps = {
   minDate?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void; // Cambio aquí para recibir una función
   className?: string;
+  step?: string;
 };
 
 export const InputField = ({
@@ -30,6 +31,7 @@ export const InputField = ({
   onChange,
   className,
   minDate,
+  step,
 }: InputFieldProps) => {
   const [hoy, setHoy] = useState("");
 
@@ -60,6 +62,7 @@ export const InputField = ({
         defaultValue={defaultValue}
         value={value}
         min={type === "date" && minDate ? hoy : undefined}
+        step={type === "time" && step ? "1800" : undefined}
         onChange={(e) => {
           if (onChange) {
             onChange(e); // Si `onChange` fue pasado como prop, ejecutamos la función

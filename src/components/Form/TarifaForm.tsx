@@ -19,23 +19,14 @@ export const TarifaForm = ({
       message: "El nombre debe de tener como máximo 50 carácteres",
     }),
 
-    descripcion: z
-      .string()
-      .min(1, {
-        message: "Introduce la descripción",
-      })
-      .max(100, {
-        message: "La descripción debe de tener como máximo 100 carácteres",
-      }),
+    descripcion: z.string().min(1, {
+      message: "Introduce la descripción",
+    }),
 
-    incluye: z
-      .string()
-      .min(1, {
-        message: "Introduce lo que incluye",
-      })
-      .max(100, {
-        message: "El campo debe de tener como máximo 100 carácteres",
-      }),
+    incluye: z.string().min(1, {
+      message: "Introduce lo que incluye",
+    }),
+
     precio: z.string().min(1, { message: "Introduce el precio" }),
     acceso: z.string().min(1, { message: "Introduce el acceso" }),
   });

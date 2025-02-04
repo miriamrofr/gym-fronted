@@ -15,6 +15,9 @@ export const SocioForm = ({
   console.log(data);
   const isDisabled = type === "ver";
   const [isSuccess, setIsSuccess] = useState(false);
+  const [membresia, setMembresia] = useState<Membresia[]>([]);
+  const [selectedMembresia, setSelectedMembresia] = useState("");
+
   const schema = z.object({
     nombre: z
       .string()
@@ -69,6 +72,10 @@ export const SocioForm = ({
       .max(50, {
         message: "La localidad debe de tener como máximo 50 carácteres",
       }),
+    membresiaId: z.preprocess(
+      (val) => Number(val),
+      z.number().min(1, "Selecciona membresia")
+    ),
     codPostal: z.string().min(1, { message: "Introduce el código de postal" }),
     numero: z.string().min(1, { message: "Introduce el número" }),
     fechaNacimiento: z.preprocess((val) => {
@@ -85,14 +92,56 @@ export const SocioForm = ({
       window.location.reload();
     }
   }, [isSuccess]);
+
+  useEffect(() => {
+    getMembresias();
+  }, []);
+
+  type Membresia = {
+    id: string;
+    nombre: string;
+    //horarios: Horario[];
+  };
+
+  const getMembresias = async () => {
+    try {
+      let url = `https://localhost:7245/api/gimnasio`;
+
+      const response = await fetch(url);
+      // URL de la API
+      if (!response.ok) {
+        throw new Error(`Error HTTP: ${response.status}`);
+      }
+      const data = await response.json();
+      const mem = data[0].tarifas.map((m: any) => ({
+        id: m.id,
+        nombre: m.nombre,
+      }));
+      setMembresia(mem);
+    } catch (error) {
+      console.error("Error al cargar:", error);
+    }
+  };
+
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
   });
+
+  useEffect(() => {
+    if (data?.membresia) {
+      setSelectedMembresia(data.membresia.toString());
+      setValue("membresiaId", data.membresia.toString()); // Actualiza react-hook-form
+    }
+  }, [data, setValue]);
+
   const onSubmit = handleSubmit(async (formData) => {
+    console.log(formData);
+
     const apiData = {
       nombre: formData.nombre,
       apellidos: formData.apellidos,
@@ -107,7 +156,7 @@ export const SocioForm = ({
       numero: parseInt(formData.numero, 10), // Convertir a número
       fechaNacimiento: formData.fechaNacimiento.toISOString(), // Convertir a ISO string
       rol: "Socio", // Asignar el rol requerido
-      membresia: "activa", // Puedes definir este campo según las reglas de tu sistema
+      tarifaId: parseInt(formData.membresiaId), // Puedes definir este campo según las reglas de tu sistema
     };
 
     try {
@@ -228,14 +277,38 @@ export const SocioForm = ({
           register={register}
           error={errors.email}
         />
-        <InputField
-          label="Membresia"
-          name="membresia"
-          defaultValue={data?.membresia}
-          disabled={type === "ver"}
-          register={register}
-          error={errors.membresia}
-        />
+
+        <div className="flex flex-col gap-2 w-full md:w-1/4">
+          <label className="text-xs">Membresia</label>
+          <select
+            className={`ring-[1.5px] p-2 bg-white rounded-md text-sm text-black w-full ${
+              isDisabled
+                ? "bg-white text-black ring-gray-300 opacity-100"
+                : "bg-white text-black ring-gray-300"
+            }`}
+            {...register("membresiaId")}
+            disabled={type === "ver"}
+            value={selectedMembresia}
+            onChange={(e) => {
+              setSelectedMembresia(e.target.value);
+              register("membresiaId").onChange(e);
+            }}
+          >
+            <option value="" disabled>
+              Selecciona membresia
+            </option>
+            {membresia.map((mem) => (
+              <option key={mem.id} value={mem.id}>
+                {mem.nombre}
+              </option>
+            ))}
+          </select>
+          {errors.membresiaId?.message && (
+            <p className="text-xs text-red-400">
+              {errors.membresiaId.message.toString()}
+            </p>
+          )}
+        </div>
       </div>
       <span className="text-xs text-gray-400 font-medium">DATOS DOMICILIO</span>
       <div className="flex justify-between flex-wrap gap-4">

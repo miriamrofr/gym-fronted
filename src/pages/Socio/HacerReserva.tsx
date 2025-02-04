@@ -1,9 +1,10 @@
 import { useForm } from "react-hook-form";
 import { InputField } from "../../components/InputField";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "react-toastify";
+import { useAuth } from "../../context/UseAuth";
 
 const pistaSchema = z.object({
   fecha: z.preprocess((val) => {
@@ -50,9 +51,10 @@ type Deporte = {
 
 const HacerReserva = () => {
   const [deportes, setDeportes] = useState<Deporte[]>([]);
+  const { user } = useAuth() ?? {};
+  const [pistaId, setPistaId] = useState("");
 
   const {
-    control,
     register,
     handleSubmit,
     formState: { errors },
@@ -73,6 +75,35 @@ const HacerReserva = () => {
   };
 
   const onSubmit = async (dataForm: FormValues) => {
+    const apiData = {
+      diaSemana: dataForm.fecha,
+      horaComienzo: dataForm.horaComienzo,
+      horaFin: dataForm.horFin,
+      pistaId: dataForm.tipoId,
+      socioId: user?.id,
+    };
+
+    try {
+      var url = "https://localhost:7245/api/pista/reservar";
+
+      const response = await fetch(url, {
+        method: "POST", // O "PUT" si es para actualizar
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer <TOKEN>", // Si necesitas incluir un token
+        },
+        body: JSON.stringify(apiData),
+      });
+
+      if (response.ok) {
+        toast.success("Pista reservada correctamente.");
+      } else {
+        const text = await response.text();
+        toast.error(text);
+      }
+    } catch (error) {
+      toast.error("Ocurrió un error al enviar los datos");
+    }
     console.log(dataForm);
   };
 
@@ -83,13 +114,22 @@ const HacerReserva = () => {
         <select
           className={`ring-[1.5px] p-2 bg-white rounded-md text-sm text-black w-full`}
           {...register("tipoId")}
+          defaultValue=""
         >
+          <option value="" disabled>
+            Selecciona un deporte
+          </option>
           {deportes.map((deporte) => (
             <option key={deporte.id} value={deporte.id}>
               {deporte.tipo}
             </option>
           ))}
         </select>
+        {errors.tipoId?.message && (
+          <p className="text-xs text-red-400">
+            {errors.tipoId.message.toString()}
+          </p>
+        )}
       </div>
       <InputField
         label="Fecha"
@@ -106,6 +146,7 @@ const HacerReserva = () => {
         register={register}
         name="horaComienzo"
         error={errors.horaComienzo}
+        step="1800"
       />
 
       <InputField
@@ -114,11 +155,12 @@ const HacerReserva = () => {
         register={register}
         name="horFin"
         error={errors.horFin}
+        step="1800"
       />
 
       <button
         type="submit"
-        className="bg-[#f35a30] text-white p-2 rounded-md border-none w-max self-center"
+        className="bg-[#f35a30] text-white p-2 rounded-md border-none w-max self-center md:self-start "
       >
         Reservar
       </button>

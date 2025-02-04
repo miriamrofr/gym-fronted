@@ -12,6 +12,7 @@ type Socio = {
   dni: string;
   fechaNac: Date; // Asegúrate de que el backend devuelve un formato de fecha compatible.
   membresia: string;
+  membresiaNombre: string;
   telefono: string;
   email: string;
   estado?: string; // Si estado no está en el backend, puedes hacerlo opcional.
@@ -86,7 +87,8 @@ export const GestionSocios = () => {
           apellidos: socio.apellidos,
           dni: socio.dni,
           fechaNac: new Date(socio.fechaNacimiento), // Ajusta según la respuesta del backend
-          membresia: socio.membresia,
+          membresia: socio.tarifaId,
+          membresiaNombre: socio.tarifaNombre,
           telefono: socio.telefono,
           email: socio.correoElectronico, // O ajusta el nombre si es diferente
           estado: "Activo", // Agregar estado si es necesario
@@ -120,7 +122,7 @@ export const GestionSocios = () => {
       <td className="hidden lg:table-cell py-4">
         {new Date(item.fechaNac).toLocaleDateString()}
       </td>
-      <td className="hidden md:table-cell py-4">{item.membresia}</td>
+      <td className="hidden md:table-cell py-4">{item.membresiaNombre}</td>
       <td className="hidden lg:table-cell py-4">{item.email}</td>
       <td className="hidden lg:table-cell py-4">{item.telefono}</td>
       <td className="py-4">

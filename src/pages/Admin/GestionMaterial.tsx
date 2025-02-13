@@ -69,7 +69,6 @@ export const GestionMaterial = () => {
         }
         const data = await response.json();
         setTotalPages(data.totalPages);
-        console.log(data);
 
         const transformedData = data.material.map((material: any) => ({
           id: material.id,

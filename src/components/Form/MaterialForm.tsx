@@ -14,12 +14,12 @@ export const MaterialForm = ({
 }) => {
   const isDisabled = type === "ver";
   const [isSuccess, setIsSuccess] = useState(false);
+  const [removed, setRemoved] = useState("N");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewURL, setPreviewURL] = useState<string>(
     data?.img ? `https://localhost:7245${data.img}` : ""
   );
 
-  console.log(isDisabled);
   const schema = z.object({
     nombre: z
       .string()
@@ -82,7 +82,7 @@ export const MaterialForm = ({
 
   const processFile = (file: File) => {
     setSelectedFile(file);
-
+    setRemoved("N");
     // Generar URL para previsualización
     const reader = new FileReader();
     reader.onload = () => {
@@ -92,12 +92,12 @@ export const MaterialForm = ({
   };
 
   const handleRemoveFile = () => {
-    console.log("aaaa");
     setSelectedFile(null);
     setPreviewURL("");
+    setRemoved("S");
   };
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault(); // Permite el drop
+    event.preventDefault();
   };
 
   const onSubmit = handleSubmit(async (formData) => {
@@ -108,12 +108,11 @@ export const MaterialForm = ({
     apiData.append("Categoria", formData.categoria);
     apiData.append("FechaAdquisicion", formData.fechaAdquisicion.toISOString());
     apiData.append("Precio", formData.precio);
+    apiData.append("Removed", removed);
     if (selectedFile) {
       apiData.append("Imagen", selectedFile);
     }
 
-    console.log(apiData);
-    console.log(formData);
     try {
       var url;
       var method;
@@ -139,8 +138,6 @@ export const MaterialForm = ({
       toast.error("Ocurrió un error al enviar los datos");
     }
   });
-  console.log("aa");
-  console.log(previewURL);
   return (
     <form className="flex flex-col gap-8" onSubmit={onSubmit}>
       <h1 className="text-xl font-semibold">

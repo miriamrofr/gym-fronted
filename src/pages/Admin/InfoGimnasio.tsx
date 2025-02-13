@@ -71,6 +71,7 @@ export const InfoGimnasio = () => {
     register,
     handleSubmit,
     setValue,
+    clearErrors,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(infoGymSchema),
@@ -86,6 +87,8 @@ export const InfoGimnasio = () => {
 
   const handleCancelar = () => {
     setModificando(false); // Cancelar y volver al estado inicial
+    setInfoValue();
+    clearErrors();
   };
   useEffect(() => {
     if (isSuccess) {
@@ -140,7 +143,6 @@ export const InfoGimnasio = () => {
         }
         const data = await response.json();
 
-        console.log(data);
         const transformedData = {
           id: data[0].id,
           nombre: data[0].nombre,
@@ -166,7 +168,6 @@ export const InfoGimnasio = () => {
         setValue("email", transformedData.email);
         setValue("telefono", transformedData.telefono);
         setValue("horario", transformedData.horario);
-        console.log(transformedData);
       } catch (error) {
         console.error("Error al cargar:", error);
       }
@@ -174,6 +175,15 @@ export const InfoGimnasio = () => {
 
     fetchGimnasio();
   }, []);
+
+  const setInfoValue = () => {
+    if (gimnasio !== null) {
+      setValue("direccion", gimnasio.direccion);
+      setValue("email", gimnasio.email);
+      setValue("telefono", gimnasio.telefono);
+      setValue("horario", gimnasio.horario);
+    }
+  };
 
   const renderRow = (item: Tarifa) => (
     <tr

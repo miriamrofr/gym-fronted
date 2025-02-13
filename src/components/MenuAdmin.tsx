@@ -77,8 +77,8 @@ const MenuAdmin = () => {
   const { logout } = authContext ?? {};
 
   return (
-    <div className="h-screen flex flex-col justify-between">
-      <div className=" flex-grow mt-6">
+    <div className="min-h-screen flex flex-col">
+      <div className=" mt-6 ">
         {menuItems
           .filter((section) => section.title !== "Cuenta")
           .map((i) => (
@@ -101,7 +101,7 @@ const MenuAdmin = () => {
             </div>
           ))}
       </div>
-      <div className="mb-0 ">
+      <div className="mt-5">
         {menuItems
           .filter((section) => section.title == "Cuenta")
           .map((i) => (
@@ -123,7 +123,6 @@ const MenuAdmin = () => {
                     }`
                   }
                 >
-                  {/* Renderizamos el icono FontAwesome */}
                   <span>{items.icon}</span>
                   <span className="hidden lg:block">{items.label}</span>
                 </NavLink>

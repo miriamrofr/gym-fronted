@@ -21,9 +21,10 @@ import { ForgotPassword } from "./pages/ForgotPassword";
 import { PerfilSocio } from "./pages/Socio/PerfilSocio";
 import { ReservaClase } from "./pages/Socio/ReservaClase";
 import { ReservaPista } from "./pages/Socio/ReservaPista";
-import { Inscripcion } from "./pages/Socio/Inscripcion";
 import HacerReserva from "./pages/Socio/HacerReserva";
 import VerReserva from "./pages/Socio/VerReserva";
+import { Signup } from "./pages/signup";
+import { Inscripcion } from "./pages/Socio/Inscripcion";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path="/reset-password" element={<ResetCreatePassword />} />
         <Route path="/create-account" element={<CreateAccount />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

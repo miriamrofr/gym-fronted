@@ -137,10 +137,11 @@ export const EntrenadorForm = ({
       });
 
       if (!response.ok) {
-        throw new Error("Error en la API");
+        const text = await response.text();
+        toast.error(text);
+      } else {
+        setIsSuccess(true);
       }
-
-      setIsSuccess(true);
     } catch (error) {
       toast.error("Ocurrió un error al enviar los datos");
     }
